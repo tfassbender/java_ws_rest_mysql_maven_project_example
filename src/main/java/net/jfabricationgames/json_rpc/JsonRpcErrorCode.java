@@ -1,6 +1,6 @@
 package net.jfabricationgames.json_rpc;
 
-public enum JsonRpcErrorCodes {
+public enum JsonRpcErrorCode {
 	
 	UNKNOWN_ERROR(-10000),//
 	LOGIN_ERROR(-10100),//
@@ -11,7 +11,7 @@ public enum JsonRpcErrorCodes {
 	
 	private final int code;
 	
-	private JsonRpcErrorCodes(int code) {
+	private JsonRpcErrorCode(int code) {
 		this.code = code;
 	}
 	

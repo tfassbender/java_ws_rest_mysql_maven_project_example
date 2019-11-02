@@ -38,7 +38,7 @@ public class JsonRpcError {
 		this.data = data;
 	}
 	
-	public JsonRpcError(JsonRpcErrorCodes code, String message, Object data) {
+	public JsonRpcError(JsonRpcErrorCode code, String message, Object data) {
 		this(code.getCode(), message, data);
 	}
 	

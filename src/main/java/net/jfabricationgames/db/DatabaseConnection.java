@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -105,8 +107,10 @@ public class DatabaseConnection {
 	 *        The entry that is to be added to the table
 	 * 
 	 * @return Returns the id of the entry that was added
+	 * 
+	 * @throws SQLException
 	 */
-	public int addEntry(String entry) {
+	public int addEntry(String entry) throws SQLException {
 		//https://javabeginners.de/Datenbanken/Prepared_Statement.php
 		String query = "INSERT INTO ws_db_test.entries(`id`, `entry`) VALUES (\"0\", ?);";
 		int id = -1;
@@ -130,9 +134,6 @@ public class DatabaseConnection {
 				}
 			}
 		}
-		catch (SQLException sqle) {
-			sqle.printStackTrace();
-		}
 		return id;
 	}
 	
@@ -143,8 +144,10 @@ public class DatabaseConnection {
 	 *        The id of the entry in the table
 	 * 
 	 * @return The entry at the given id in the table (or null if there is no such id in the table)
+	 * 
+	 * @throws SQLException
 	 */
-	public String getEntry(int id) {
+	public String getEntry(int id) throws SQLException {
 		//https://javabeginners.de/Datenbanken/Prepared_Statement.php
 		String query = "SELECT entry FROM ws_db_test.entries WHERE id = ?;";
 		String entry = null;
@@ -159,9 +162,28 @@ public class DatabaseConnection {
 				}
 			}
 		}
-		catch (SQLException sqle) {
-			sqle.printStackTrace();
-		}
 		return entry;
+	}
+	
+	/**
+	 * Get all ids in the table as a list of Integers
+	 * 
+	 * @return
+	 * 
+	 * @throws SQLException
+	 */
+	public List<Integer> getIds() throws SQLException {
+		String query = "SELECT id FROM ws_db_test.entries";
+		List<Integer> ids = new ArrayList<Integer>();
+		
+		DataSource dataSource = getDataSource();
+		try (Connection con = dataSource.getConnection();//
+				PreparedStatement ps = con.prepareStatement(query);//
+				ResultSet rs = ps.executeQuery()) {
+			while (rs.next()) {
+				ids.add(Integer.valueOf(rs.getInt(1)));
+			}
+		}
+		return ids;
 	}
 }
